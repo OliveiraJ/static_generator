@@ -1,19 +1,23 @@
 import shutil
+import sys
 from pathlib import Path
 
 from generate_page import generate_pages_recursive
-from textnode import TextNode, TextType
 
 STATIC = "./static"
-PUBLIC = "./public"
+PUBLIC = "./docs"
 TEMPLATE = "./template.html"
 CONTENT = "./content"
+DEFAULT_BASE_PATH = "/"
 
 
 def main():
-    print(TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev"))
+    base_path = DEFAULT_BASE_PATH
+    if len(sys.argv) > 1:
+        base_path = sys.argv[1]
+
     sync_folder(STATIC, PUBLIC)
-    generate_pages_recursive(CONTENT, TEMPLATE, PUBLIC)
+    generate_pages_recursive(CONTENT, TEMPLATE, PUBLIC, base_path)
 
 
 def sync_folder(source: str | Path, destination: str | Path) -> None:
